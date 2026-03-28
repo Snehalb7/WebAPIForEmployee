@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
-using WebAPIForEmployee.Models;
 using System.Collections.Generic;
+using WebAPIForEmployee.Filter;
+using WebAPIForEmployee.Models;
 
 namespace WebAPIForEmployee.Controllers
 {
@@ -18,7 +20,20 @@ namespace WebAPIForEmployee.Controllers
             _dbContext = context;
         }
         [HttpGet]
+        [Route("CheckExceptionFilter")]
+        [ExceptionFilter]
+        public IActionResult CheckExceptionFilter()
+        {
+            int a = 10, b = 0;
+
+            int c = a / b;
+
+            Console.WriteLine("Check Exception method called");
+            return Ok("Check exception method called");
+        }
+        [HttpGet]
         [Route("GetEmployee")]
+        [MyActionFilter]
         public IActionResult GetAllEmployee()
         {
             var employees = _dbContext.Employees.ToList();
@@ -119,6 +134,7 @@ namespace WebAPIForEmployee.Controllers
                 return NotFound("Employee Not Found");
             }
         }
+       
     }
 
 }
